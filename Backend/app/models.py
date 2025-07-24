@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, String, MetaData, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-import datetime
+from datetime import datetime
 
 metadata = MetaData()
 
@@ -11,5 +11,5 @@ users = Table(
     Column("email", String, unique=True,nullable=False ),
     Column("full_name", String),
     Column("role", String),
-    Column("created_at", DateTime, default=datetime.datetime.utcnow)
+    Column("created_at", DateTime, default=datetime.utcnow)
 )
