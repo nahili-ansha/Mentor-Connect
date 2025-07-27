@@ -1,11 +1,12 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from databases import Database
 import os
 
-from app.schemas import UserIn, MentorIn, MenteeIn, UserOut
+from app.schemas import UserIn, MentorIn, MenteeIn, UserOut, MentorProfileIn
 from sqlalchemy.sql import insert
-from app.models import users, metadata
+from app.models import users, mentor_profiles, metadata
 import uuid
 
 from typing import List
@@ -28,6 +29,15 @@ async def connect_db():
 async def disconnect_db():
     await database.disconnect()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
+# Create user
 @app.post("/users/")
 async def create_user(user: UserIn):
     query = users.insert().values(
@@ -40,7 +50,7 @@ async def create_user(user: UserIn):
     await database.execute(query)
     return {"status": "User created successfully!"}
 
-
+# Create mentor
 @app.post("/mentors/")
 async def create_mentor(mentor: MentorIn):
     query = users.insert().values(
@@ -53,7 +63,7 @@ async def create_mentor(mentor: MentorIn):
     await database.execute(query)
     return {"status": "mentor created successfully!"}
 
-
+# Create mentee
 @app.post("/mentees/")
 async def create_mentee(mentee: MenteeIn):
     query = users.insert().values(
@@ -66,6 +76,23 @@ async def create_mentee(mentee: MenteeIn):
     await database.execute(query)
     return {"status": "mentee created successfully!"}
 
+# Create mentor profile
+@app.post("/mentor_profiles/")
+async def create_mentor_profile(profile: MentorProfileIn):
+    query = insert(mentor_profiles).values(
+        id=uuid.uuid4(),
+        user_id=profile.user_id,
+        bio=profile.bio,
+        skills=profile.skills,
+        availability=profile.availability,
+        created_at=datetime.utcnow(),
+        company=profile.company,
+        linkedin_url=profile.linkedin_url,
+        timezone=profile.timezone,
+        categories=profile.categories
+    )
+    await database.execute(query)
+    return {"status": "mentor profile created successfully!"}
 
 @app.get("/mentors/",response_model=List[UserOut] )
 async def get_mentors():
