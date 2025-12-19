@@ -37,4 +37,19 @@ class MentorProfileIn(BaseModel):
     timezone: Optional[str] = None
     categories: Optional[List[str]] = None
 
+# pydantic model for mentor profile output
+class MentorProfileOut(BaseModel):
+    id: str
+    user_id: str
+    full_name: str
+    email: str
+    bio: str
+    skills: List[str]
+    availability: str
+    created_at: datetime
+    company: Optional[str] = None
+    linkedin_url: Optional[str] = None
+    timezone: Optional[str] = None
+    categories: Optional[List[str]] = None
+
 
