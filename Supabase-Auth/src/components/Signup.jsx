@@ -37,8 +37,8 @@ export const Signup = () => {
                 Already have an account? <Link to="/signin">Sign in</Link>
             </p> 
             <div className="flex flex-col py-4 ">
-                <input onChange={(e) => setEmail(e.target.value)} className="p-3 mt-4" type="email" placeholder="Email"></input>
-                <input onChange={(e) => setPassword(e.target.value)} className="p-3 mt-4" type="password" placeholder="Password"></input>
+                <input onChange={(e) => setEmail(e.target.value)} className="p-3 border mt-4" type="email" placeholder="Email"></input>
+                <input onChange={(e) => setPassword(e.target.value)} className="p-3 border mt-4" type="password" placeholder="Password"></input>
                 <button type="submit" disabled={loading} className="mt-6 w-full">Sign up</button>
                 {error && <p className='text-red-600 text-center pt-4'>{error}</p>}
             </div>
