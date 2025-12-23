@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, Depends
-from app.auth import get_current_user
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import HTTPException
 from databases import Database
@@ -40,9 +39,9 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# Create user (protected)
+# Create user 
 @app.post("/users/")
-async def create_user(user: UserIn, current_user = Depends(get_current_user)):
+async def create_user(user: UserIn):
     query = users.insert().values(
         id=uuid.uuid4(),
         email=user.email,
@@ -53,9 +52,9 @@ async def create_user(user: UserIn, current_user = Depends(get_current_user)):
     await database.execute(query)
     return {"status": "User created successfully!"}
 
-# Create mentor (protected)
+# Create mentor 
 @app.post("/mentors/")
-async def create_mentor(mentor: MentorIn, current_user = Depends(get_current_user)):
+async def create_mentor(mentor: MentorIn):
     query = users.insert().values(
         id=uuid.uuid4(),
         email=mentor.email,
@@ -66,9 +65,9 @@ async def create_mentor(mentor: MentorIn, current_user = Depends(get_current_use
     await database.execute(query)
     return {"status": "mentor created successfully!"}
 
-# Create mentee (protected)
+# Create mentee 
 @app.post("/mentees/")
-async def create_mentee(mentee: MenteeIn, current_user = Depends(get_current_user)):
+async def create_mentee(mentee: MenteeIn):
     query = users.insert().values(
         id=uuid.uuid4(),
         email=mentee.email,
@@ -79,9 +78,9 @@ async def create_mentee(mentee: MenteeIn, current_user = Depends(get_current_use
     await database.execute(query)
     return {"status": "mentee created successfully!"}
 
-# Create mentor profile (protected)
+# Create mentor profile 
 @app.post("/mentor_profiles/")
-async def create_mentor_profile(profile: MentorProfileIn, current_user = Depends(get_current_user)):
+async def create_mentor_profile(profile: MentorProfileIn):
     query = insert(mentor_profiles).values(
         id=uuid.uuid4(),
         user_id=profile.user_id,
